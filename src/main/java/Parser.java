@@ -32,6 +32,27 @@ public class Parser {
 
         Document page = getPage();
         Element p = page.select("div[id=list]").first();
+
+        Element script = p.selectFirst("script");
+        String[] parts = script.toString().split("coordinates: ");
+        String[] resultParts = new String[2795];
+
+        int j = 1;
+        int k = 0;
+        myMap[] massMap = new myMap[2795];
+        for(String respart : resultParts){
+            respart = parts[j].substring(parts[j].indexOf('[') + 1, parts[j++].indexOf(']'));
+            massMap[k++] = new myMap(respart);
+
+            System.out.println(respart);
+            System.out.println("*********************");
+        }
+
+
+
+
+
+        //System.out.println(script);
         //css query language
         Elements textAdresses = page.select("div.sl-item-text");
         Elements adressLinks = p.select("a[href]");
@@ -43,7 +64,7 @@ public class Parser {
 
         int i = 0;
         for(Element link : adressLinks)
-            list.get(i++).append("link", "https://xn--90adear.xn--p1ai" + link.attr("href"));
+            list.get(i).append("link", "https://xn--90adear.xn--p1ai" + link.attr("href")).append("latitude", massMap[i].getLatitude()).append("longitude", massMap[i++].getLongitude());
 
         collection.insertMany(list);
 
